@@ -1,18 +1,19 @@
 <?php
 
-class Pinterest_API {
-	
+class Pinterest_API 
+{	
 	public $base_url;
 	public $access_token;
 	const REQUIRED = 'arg is required';
 	
-	function __construct($access_token='') {
+	function __construct($access_token='') 
+	{
 		$this->base_url = 'https://api.pinterest.com/v2';
 		$this->access_token = $access_token;
 	}
 	
-	function fetch_access_token($client_id, $client_secret, $username, $password) {
-
+	function fetch_access_token($client_id, $client_secret, $username, $password) 
+	{
 		$ch=curl_init();
 		curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $password);                                                
 
@@ -42,8 +43,8 @@ class Pinterest_API {
 		return $s;
 	}
 	
-	function upload_pin($params) {
-		
+	function upload_pin($params) 
+	{
 		$post = self::params_filter($params, array(
 			'board' => self::REQUIRED,      // board id #
 			'details' => self::REQUIRED,    // description, a string, limit unknown, accepts markups
@@ -57,8 +58,8 @@ class Pinterest_API {
 		return $this->post('/pin/', $post);
 	}
 	
-	function repin($params) {
-		
+	function repin($params) 
+	{	
 		$params = self::params_filter($params, array(
 			'board' => self::REQUIRED,
 			'details' => self::REQUIRED,
@@ -75,11 +76,13 @@ class Pinterest_API {
 		return $this->post($endpoint, $post);            
 	}
 	
-	function activity($params=array()) {
+	function activity($params=array()) 
+	{
 		return $this->get('/activity/', $params);
 	}
 	
-	function all($params=array()) {
+	function all($params=array()) 
+	{
 		$params = self::params_filter($params, array(
 			'limit' => 36,
 			'page' => 1
@@ -88,7 +91,8 @@ class Pinterest_API {
 		return $this->get('/all/', $params);
 	}
 
-	function popular($params=array()) {
+	function popular($params=array()) 
+	{
 		$params = self::params_filter($params, array(
 			'limit' => 36,
 			'page' => 1
@@ -97,15 +101,18 @@ class Pinterest_API {
 		return $this->get('/popular/', $params);
 	}
 	
-	function newboards($params=array()) {
+	function newboards($params=array()) 
+	{
 		return $this->get('/newboards/', $params);
 	}
 	
-	function boards($params=array()) {
+	function boards($params=array()) 
+	{
 		return $this->get('/boards/', $params);    
 	}
 	
-	function categories($params=array()) {
+	function categories($params=array()) 
+	{
 		$params = self::params_filter($params, array(
 			'limit' => 36,
 			'page' => 1
@@ -113,7 +120,8 @@ class Pinterest_API {
 		return $this->get('/boards/categories/', $params);
 	}
 	
-	function post($endpoint, $post=array()) {
+	function post($endpoint, $post=array()) 
+	{
 		$ch=curl_init();
 
 		$request_url = $this->base_url . $endpoint;
@@ -129,12 +137,12 @@ class Pinterest_API {
 		curl_setopt($ch, CURLOPT_POSTFIELDS,$post);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); 
 		
-#            curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
-#            curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1");
-#            curl_setopt($ch, CURLOPT_PROXYPORT, 8888);
-#            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		
-	
+		/*
+		curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
+		curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1");
+		curl_setopt($ch, CURLOPT_PROXYPORT, 8888);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		*/
 		
 		
 		$resp=curl_exec($ch);            
@@ -144,7 +152,8 @@ class Pinterest_API {
 		return $resp;
 	}
 	
-	function get($endpoint, $params=array()) {
+	function get($endpoint, $params=array()) 
+	{
 		$ch=curl_init();
 		
 		if ($this->access_token and !isset($params['access_token'])) {
@@ -167,8 +176,8 @@ class Pinterest_API {
 	}
 	
 	
-	static function params_filter($params, $defaults) {
-		
+	static function params_filter($params, $defaults) 
+	{	
 		foreach ($defaults as $k => $v) {
 			
 			if (!isset($params[$k])) {
